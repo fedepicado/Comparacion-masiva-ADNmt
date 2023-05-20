@@ -4,7 +4,7 @@
 # In[1]:
 
 
-#PRONTO READme JUNTO AL SCRIPT DONDE SE DARAN TODOS LOS DETALLES DEL PROGRAMA.
+#librerias
 import pandas as pd
 import os
 import glob
@@ -109,18 +109,18 @@ def combinar_rangos(rango1, rango2):
 
 #Estas funciones sirven en para descartar mutaciones que caigan fuera del rango determinado, excluye mutaciones de regiones homopolimericas y tienen en cuenta las heteroplasmias
 
-def extract_numbers(lst):
-    numbers = []
+def extraer_numeros(lst):
+    numeros = []
     pattern = r"\d+(\.\d+)?"
     for s in lst:
         match = re.search(pattern, s)
         if match:
-            number = match.group()
-            if '.' in number:
-                numbers.append(float(number))
+            numero = match.group()
+            if '.' in numero:
+                numeros.append(float(numero))
             else:
-                numbers.append(int(number))
-    return numbers
+                numeros.append(int(numero))
+    return numeros
 
 def repetidos(l1):
     nueva=[]
@@ -133,14 +133,18 @@ def repetidos(l1):
             repetidos.append(i)
     return repetidos
 
-def descartarNumFloat(difer_num, difer_string):
-    # Encontrar los índices de los números enteros en la lista de números
-    indices_enteros = [i for i, x in enumerate(difer_num) if isinstance(x, int)]
+def filtrar_posiciones(lista_cadenas, lista_numeros):
+    patrones_descartar = ["309.*C", "455.*T", "463.*C", "524.*A", "524.*C", "573.*C", "16193.*C","A523DEL","C524DEL"]
+    patron_descartar = "|".join(patrones_descartar)
+    resultado_cadenas = []
+    resultado_numeros = []
     
-    # Eliminar los elementos correspondientes en la lista de strings
-    difer_string1 = [difer_string[i] for i in indices_enteros]
+    for cadena, numero in zip(lista_cadenas, lista_numeros):
+        if not re.match(patron_descartar, cadena):
+            resultado_cadenas.append(cadena)
+            resultado_numeros.append(numero)
     
-    return list(filter(lambda x: isinstance(x, int), difer_num)), difer_string1
+    return resultado_numeros,resultado_cadenas
 
 
 def pertenece_rango(rango_lectura,difer_num,difer_string):
@@ -276,8 +280,8 @@ def GENERAL(sec1,sec2,rango_sec1,rango_sec2,nombre1,nombre2):
     a1= list(set(sec1) - set(sec2))
     b1= list(set(sec2) - set(sec1))
     dif=list(a1+b1)# diferencias como string
-    dif_num= extract_numbers(dif)#diferecncias como numeros.
-    dif2 = descartarNumFloat(dif_num, dif)## descarto regiones homopolimericas
+    dif_num= extraer_numeros(dif)#diferecncias como numeros.
+    dif2 = filtrar_posiciones(dif, dif_num)## descarto regiones homopolimericas
     quedan_dif= pertenece_rango(rango_lectura,dif2[0],dif2[1])#descarto por rango 
     ## encontrar los numeros que no estan repetidos
     unicos=unique_positions(quedan_dif[0])
@@ -291,12 +295,6 @@ def GENERAL(sec1,sec2,rango_sec1,rango_sec2,nombre1,nombre2):
 
 
 # In[6]:
-
-
-
-
-
-# In[7]:
 
 
 #Funcion aux de extraerDatosMASIVA()
@@ -329,7 +327,7 @@ def extraerDatosMASIVA(df_corregido,lista_general):
     return lista_general
 
 
-# In[8]:
+# In[7]:
 
 
 # Organiza el dataframe, hace la comparacion y organiza los resultados para que esten en el formato correcto
@@ -360,10 +358,10 @@ def Masiva(df_base):
     df_resultados["Rango de lectura"]=rango_lista
     df_resultados.set_index(["INDIVIDUO 1", "INDIVIDUO 2"], inplace=True)
     df_resultados.sort_values(by=["INDIVIDUO 1",'Diferencias'],axis=0, na_position="last",inplace=True)
-    return  df_resultados.style.applymap(lambda x: 'text-align: center').to_excel("Comparacion Masiva.xlsx")
+    return  df_resultados.style.applymap(lambda x: 'text-align: center').to_excel("Resultados Comparacion Masiva.xlsx")
 
 
-# In[9]:
+# In[8]:
 
 
 # Leemos la base de datos que se va a comparar
@@ -375,7 +373,7 @@ for col in df.iloc[:,:]:
     df[col] = df[col].str.strip()
 
 
-# In[10]:
+# In[9]:
 
 
 # Medimos el tiempo que tarda en ejecutarse la comparacion
@@ -384,12 +382,6 @@ Masiva(df)
 stop = timeit.default_timer()
 
 print('Tiempo de procesamiento: ', stop - start, "seg") 
-print("Los resultados se encuentran en la misma carpeta donde se corrio el script bajo el nombre Comparacion Masiva")
+print("Los resultados se encuentran en la misma carpeta donde se corrio el script bajo el nombre Resultados Comparacion Masiva")
 print("\n")
-
-
-# In[ ]:
-
-
-
 
