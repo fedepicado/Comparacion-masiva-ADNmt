@@ -50,10 +50,11 @@ def data(Sample_Name,rango_entero,Sec):
       "Sec": Sec
   }
         
-def limpiarEspacios(lista):
-    for i in range(len(lista)):
-        lista[i] = lista[i].strip()
-    return lista
+def limpiarEspacios(df_base):
+    for col in df_base.iloc[:,:]:
+        df_base[col] = df_base[col].astype(str)
+        df_base[col] = df_base[col].str.replace(r"\s+", "") ##limpio todo tipo de espacio en el dataframe
+    return df_base
 
 def data(Sample_Name, rango_entero, Sec):
     return pd.DataFrame({'Sample Name': Sample_Name, 'Rango de lectura': rango_entero, 'Sec': Sec})
@@ -308,7 +309,7 @@ def extraerFilas_extra(df):
         Sec.append(row["Sec"])
     return Sample_Name,Rango,Sec
 
-# Permite ir extrayendo cada par de muestras del df y se le aplica la funcion general que hace a la comparacion en si.
+# Permite ir extrayendo cada par de muestras del df y se le aplica la funcion general que hace a la comparación en si.
 def extraerDatosMASIVA(df_corregido,lista_general):
     Sample_Name,Rango,Sec= extraerFilas_extra(df_corregido)
     i=0
@@ -332,13 +333,13 @@ def extraerDatosMASIVA(df_corregido,lista_general):
 
 # Organiza el dataframe, hace la comparacion y organiza los resultados para que esten en el formato correcto
 def Masiva(df_base):
-    print("Se ejecutara una Comparacion Masiva, esto puede demorar unos minutos")
+    print("Se ejecutara una Comparación Masiva, esto puede demorar unos minutos")
     print("\n")
     cols=cantColsDf(df_base)
     df_unido=concatCols(df_base,cols)
     Sample_Name,Rango,Sec=extraerFilas(df_unido)
-    Rango_limpio=limpiarEspacios(Rango)
-    df_corregido=data(Sample_Name,Rango_limpio,Sec)
+    df=data(Sample_Name,Rango,Sec)
+    df_corregido=limpiarEspacios(df)
     lista_general=[]
     extraerDatosMASIVA(df_corregido,lista_general)
     df_resultados= pd.DataFrame(lista_general, columns =['INDIVIDUO 1', 'INDIVIDUO 2', 'Diferencias',"Rango de lectura"])
@@ -358,7 +359,7 @@ def Masiva(df_base):
     df_resultados["Rango de lectura"]=rango_lista
     df_resultados.set_index(["INDIVIDUO 1", "INDIVIDUO 2"], inplace=True)
     df_resultados.sort_values(by=["INDIVIDUO 1",'Diferencias'],axis=0, na_position="last",inplace=True)
-    return  df_resultados.style.applymap(lambda x: 'text-align: center').to_excel("Resultados Comparacion Masiva.xlsx")
+    return  df_resultados.style.applymap(lambda x: 'text-align: center').to_excel("Resultados Comparación Masiva.xlsx")
 
 
 # In[8]:
@@ -367,21 +368,19 @@ def Masiva(df_base):
 # Leemos la base de datos que se va a comparar
 df = pd.read_excel("Base de datos.xlsx")
 
-# pasamos todos los datos a str y le sacamos los espacios en blanco
-for col in df.iloc[:,:]:
-    df[col] = df[col].astype(str)
-    df[col] = df[col].str.strip()
+df.drop_duplicates(subset=["Sample Name"],keep="first", inplace=True)## elimino posibles datos duplicados
+df[df.duplicated(subset=["Sample Name"],keep=False)]#compruebo que no hayan quedado datos duplicados
 
 
 # In[9]:
 
 
-# Medimos el tiempo que tarda en ejecutarse la comparacion
+# Medimos el tiempo que tarda en ejecutarse la comparación
 start = timeit.default_timer()
 Masiva(df)
 stop = timeit.default_timer()
 
 print('Tiempo de procesamiento: ', stop - start, "seg") 
-print("Los resultados se encuentran en la misma carpeta donde se corrio el script bajo el nombre Resultados Comparacion Masiva")
+print("Los resultados se encuentran en la misma carpeta donde se corrio el script bajo el nombre Resultados Comparación Masiva")
 print("\n")
 
