@@ -134,18 +134,14 @@ def repetidos(l1):
             repetidos.append(i)
     return repetidos
 
-def filtrar_posiciones(lista_cadenas, lista_numeros):
-    patrones_descartar = ["309.*C", "455.*T", "463.*C", "524.*A", "524.*C", "573.*C", "16193.*C","A523DEL","C524DEL"]
+def filtrar_posiciones(lista_cadenas):
+    patrones_descartar = ["309.*C","C313DEL","C314DEL","C315DEL", "455.*T", "463.*C", "524.*A", "524.*C", "573.*C", "16193.*C","A523DEL","C524DEL"]
     patron_descartar = "|".join(patrones_descartar)
     resultado_cadenas = []
-    resultado_numeros = []
-    
-    for cadena, numero in zip(lista_cadenas, lista_numeros):
+    for cadena in (lista_cadenas):
         if not re.match(patron_descartar, cadena):
             resultado_cadenas.append(cadena)
-            resultado_numeros.append(numero)
-    
-    return resultado_numeros,resultado_cadenas
+    return resultado_cadenas
 
 
 def pertenece_rango(rango_lectura,difer_num,difer_string):
@@ -281,9 +277,9 @@ def GENERAL(sec1,sec2,rango_sec1,rango_sec2,nombre1,nombre2):
     a1= list(set(sec1) - set(sec2))
     b1= list(set(sec2) - set(sec1))
     dif=list(a1+b1)# diferencias como string
-    dif_num= extraer_numeros(dif)#diferecncias como numeros.
-    dif2 = filtrar_posiciones(dif, dif_num)## descarto regiones homopolimericas
-    quedan_dif= pertenece_rango(rango_lectura,dif2[0],dif2[1])#descarto por rango 
+    dif2 = filtrar_posiciones(dif)## descarto regiones homopolimericas
+    dif_num=extraer_numeros(dif2)#diferencias como numeros.
+    quedan_dif= pertenece_rango(rango_lectura,dif_num,dif2)#descarto por rango 
     ## encontrar los numeros que no estan repetidos
     unicos=unique_positions(quedan_dif[0])
     ### de estos valores unicos hay alguno que tenga alguna heteroplasmia? 
