@@ -42,7 +42,7 @@ def extraerFilas(df):
     Sec = df['Secuencia_lista'].tolist()
     return Sample_Name, Rango, Sec
 
-### para ver si quedo bien
+
 def data(Sample_Name,rango_entero,Sec):
       data={
       "Sample Name": Sample_Name,
@@ -50,12 +50,6 @@ def data(Sample_Name,rango_entero,Sec):
       "Sec": Sec
   }
         
-def limpiarEspacios(df_base):
-    for col in df_base.iloc[:,:]:
-        df_base[col] = df_base[col].astype(str)
-        df_base[col] = df_base[col].str.replace(r"\s+", "") ##limpio todo tipo de espacio en el dataframe
-    return df_base
-
 def data(Sample_Name, rango_entero, Sec):
     return pd.DataFrame({'Sample Name': Sample_Name, 'Rango de lectura': rango_entero, 'Sec': Sec})
 
@@ -323,23 +317,7 @@ def extraerDatosMASIVA(df_corregido,lista_general):
         i+=1
     return lista_general
 
-
-# In[7]:
-
-
-# Organiza el dataframe, hace la comparacion y organiza los resultados para que esten en el formato correcto
-def Masiva(df_base):
-    print("Se ejecutara una Comparación Masiva, esto puede demorar unos minutos")
-    print("\n")
-    cols=cantColsDf(df_base)
-    df_unido=concatCols(df_base,cols)
-    Sample_Name,Rango,Sec=extraerFilas(df_unido)
-    df=data(Sample_Name,Rango,Sec)
-    df_corregido=limpiarEspacios(df)
-    lista_general=[]
-    extraerDatosMASIVA(df_corregido,lista_general)
-    df_resultados= pd.DataFrame(lista_general, columns =['INDIVIDUO 1', 'INDIVIDUO 2', 'Diferencias',"Rango de lectura"])
-    ## cambio el formato del rango de lectura. 
+def transfRango(df_resultados):
     rango_lista=df_resultados["Rango de lectura"].tolist()
     rango_completo="16024-576"
     for ind,x in enumerate(rango_lista):
@@ -353,6 +331,26 @@ def Masiva(df_base):
             b_str = "-".join(str(num) for num in b)
             rango_lista[ind]= a_str + "/" + b_str
     df_resultados["Rango de lectura"]=rango_lista
+    return df_resultados
+
+
+# In[7]:
+
+
+# Organiza el dataframe, hace la comparacion y organiza los resultados para que esten en el formato correcto
+def Masiva(df_base):
+    print("Se ejecutara una Comparación Masiva, esto puede demorar unos minutos")
+    print("\n")
+    df_base["Rango de lectura"] = df_base["Rango de lectura"].str.replace(r"\s+", "") 
+    cols=cantColsDf(df_base)
+    df_unido=concatCols(df_base,cols)
+    Sample_Name,Rango,Sec=extraerFilas(df_unido)
+    df=data(Sample_Name,Rango,Sec)
+    lista_general=[]
+    extraerDatosMASIVA(df,lista_general)
+    df_resultados= pd.DataFrame(lista_general, columns =['INDIVIDUO 1', 'INDIVIDUO 2', 'Diferencias',"Rango de lectura"])
+    ## cambio el formato del rango de lectura. 
+    df_resultados= transfRango(df_resultados)
     df_resultados.set_index(["INDIVIDUO 1", "INDIVIDUO 2"], inplace=True)
     df_resultados.sort_values(by=["INDIVIDUO 1",'Diferencias'],axis=0, na_position="last",inplace=True)
     return  df_resultados.style.applymap(lambda x: 'text-align: center').to_excel("Resultados Comparación Masiva.xlsx")
@@ -362,7 +360,7 @@ def Masiva(df_base):
 
 
 # Leemos la base de datos que se va a comparar
-df = pd.read_excel("Base de datos.xlsx")
+df = pd.read_excel("Base de datos PRUEBA.xlsx")
 
 df.drop_duplicates(subset=["Sample Name"],keep="first", inplace=True)## elimino posibles datos duplicados
 df[df.duplicated(subset=["Sample Name"],keep=False)]#compruebo que no hayan quedado datos duplicados
