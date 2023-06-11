@@ -11,7 +11,7 @@ En el caso de querer trabajar con otra base de datos, ir a la sección donde se 
     <img width="70%" src="https://github.com/fedepicado/Comparacion-masiva-ADNmt/assets/89711061/467c60d7-9e73-45a2-bdac-e82d5d9b0d01"> 
 </p>
 
-Para ejecutarlo solo tienen que darle click al boton de “siguiente” que ejecuta todo el codigo.
+Para ejecutarlo solo tienen que darle click al boton de “fast foward” que ejecuta todo el codigo.
 <p align="center" width="90%">
     <img width="70%" src="https://github.com/fedepicado/Comparacion-masiva-ADNmt/assets/89711061/7267da66-98c7-44ae-91f0-1f4c671508cb"> 
 </p>
