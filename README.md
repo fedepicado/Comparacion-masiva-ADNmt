@@ -6,16 +6,6 @@ Este script permite realizar una comparación masiva de haplotipos de ADNmt a pa
 
 Para poder usar este script primero tienen que tener instalado Python en su computadora. Este script está en formato .py y .ipynb para correrlo en el entorno de desarrollo que prefiera. Si no está familiarizado con el lenguaje, puede utilizar Jupyter Notebook, el cual es de rápido aprendizaje. Visit https://www.anaconda.com/download. Luego deben descargar el repositorio y descomprimir la carpeta. Entre los archivos se brinda una Base de datos de prueba para que puedan correr el script por primera vez sin la necesidad de hacer ninguna modificación en el código.
 
-En el caso de querer trabajar con otra base de datos, ir a la sección donde se lee la base de datos y cambiar el nombre del archivo. 
-<p align="center" width="100%">
-    <img width="70%" src="https://github.com/fedepicado/Comparacion-masiva-ADNmt/assets/89711061/467c60d7-9e73-45a2-bdac-e82d5d9b0d01"> 
-</p>
-
-Para ejecutarlo solo tienen que darle click al boton de “fast forward” que ejecuta todo el codigo.
-<p align="center" width="90%">
-    <img width="70%" src="https://github.com/fedepicado/Comparacion-masiva-ADNmt/assets/89711061/7267da66-98c7-44ae-91f0-1f4c671508cb"> 
-</p>
-
 ## Lógica del algoritmo :gear:
 
 Requiere una tabla en formato excel donde la primera columna contenga el nombre de las muestras (Sample Name), la segunda columna sea el rango de lectura de la muestra (Rango de lectura), y las columnas siguientes correspondan a los haplotipos, numeradas como 0,1,2,3,etc 
