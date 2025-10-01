@@ -45,7 +45,7 @@ python -m streamlit run app.py
 
 ### Formato del Excel esperado
 
-- Columnas requeridas: `**Sample Name**`, `**Rango de lectura**`.
+- Columnas requeridas: `Sample Name`, `Rango de lectura`.
 - Las mutaciones deben estar en columnas adicionales (por ejemplo `0, 1, 2, ...`) con valores tipo `A73G`, `C151S`, etc.
 - El rango de lectura debe expresarse como:
   - D-Loop completo: `16024-576`
