@@ -1,35 +1,77 @@
 # Comparacion-masiva-ADNmt
 
-Este script permite realizar una comparación masiva de haplotipos de ADNmt a partir de un archivo .xlsx, teniendo en cuenta los rangos de lectura de las muestras, excluyendo de la comparacion regiones homopolimericas y teniendo en cuenta heteroplasmias. 
+Este proyecto permite realizar una comparación masiva de haplotipos de ADNmt a partir de un archivo .xlsx, teniendo en cuenta los rangos de lectura de las muestras, excluyendo de la comparacion regiones homopolimericas y teniendo en cuenta heteroplasmias. 
 
-## Logica del algoritmo
+## Aplicación Web (Streamlit)
 
-Requiere una tabla en formato excel donde la primera columna contenga el nombre de las muestras (Sample Name), la segunda columna sea el rango de lectura de la muestra (Rango de lectura), y las columnas siguientes correspondan a los haplotipos, numeradas como 0,1,2,3,etc 
+El repositorio incluye una aplicación en Streamlit que realiza exactamente la misma comparación a partir de un Excel de entrada.
 
-### Rango de lectura y regiones homopolimericas
-Lo primero que hace es agrupar las columnas que contienen las mutaciones en una sola columna como una lista de strings, bajo el nombre secuencia. Se seleccionan las columnas Sample Name, Rango de lectura y secuencia. A esa nueva base de datos se le aplican un conjunto de funciones que hacen a la comparacion.
-Lo primero que se tiene en cuenta es el rango de lectura. Si una muestra tiene secuenciado el D-Loop Completo (16024-576) y otra muestra solo tiene las regiones HV1 y HV2 (16024-16428/50-340) se tomara como rango de lectura consenso las regiones que ambas compartan. En este caso, (16024-16428/50-340).
+### Prerrequisitos
+- Python 3.9 o superior
+- pip actualizado (`pip install --upgrade pip`)
+- Sistema operativo probado: Windows 10/11
 
-Ahora si tenemos una muestra con rango de lectura (16024-16428/58-400) y otra con (16034-16430/50-340) el rango de lectura consenso sera (16034-16428/58-340).
-Es importante que para el caso que tengamos un rango incompleto sigamos esta regla de escritura; donde "/" separa regiones y "-" separa donde arranca y donde termina una region. 
+### Cómo instalar y ejecutar
 
-Una vez ya determinado el rango de lectura nos fijamos cuales son las mutaciones distintas entre ambas muestras. Lo que es igual no nos interesa, asi que solo nos quedamos con lo diferente. De esas diferencias descartamos regiones homopolimericas y mutaciones que caen fuera del rango de lectura determinado.
+1. Crear y activar un entorno virtual (opcional pero recomendado):
 
-### Heteroplasmias
+```bash
+python -m venv .venv
+# Windows
+.\.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+```
 
-Podemos tener dos casos distintos de heteroplasmias;
+2. Instalar dependencias:
 
-Podriamos tener entre las diferencias numeros repetidos,por ejemplo: "A73G" y "A73Y". 
-Esto significa que cada una de las muestras que se comparan tenia una de estas mutaciones. Bien y ahora como determino si es diferencia o no? 
+```bash
+pip install -r requirements.txt
+```
 
-En este caso nos fijamos en la ultima letra de los numero repetidos ya que la primera hace refencia a la base que se encuentra en la secuencia de referencia. La Y detona que en esa posicion podemos encontrar tanto una C como una T. Entonces creamos una lista donde se guardan las posibles bases en la ultima posicion. Para este caso de ejemplo seria ["G","C","T"]. Queda preguntarse si dentro de la lista hay alguna letra repetida, y como no hay letras repetidas se cuenta como diferencia. 
+3. Ejecutar la app:
 
-Una vez analizadas las mutaciones con numeros repetidos, nos fijamos si las mutaciones con numeros unicos en la ultima posicion hay una letra que muestre una heteroplasmia. Pongamos de ejemplo que se encuentra la siguiente mutacion: "C151S". "S" vale por "C" o "G" entonces volvemos a crear una lista en la que guardaremos la primera letra de la mutacion, en este caso "C" y las bases que corresponden a la heteroplasmia, que son "C" o "G". Nos volvemos a preguntar hay alguna base repetida? En este caso si, la base "C" por lo que esta heteroplasmia no se considera como una diferencia. 
+```bash
+streamlit run app.py
+```
 
-## Resultados
+Si el comando anterior no abre la app, probar:
 
-Una vez ejecutado el script obtendremos una tabla con los resultados de la comparacion donde solo se tendran en cuenta el par de muestras que presenten cero o una diferencias. 
-Esta tabla tendra 4 columnas, las dos primeras corresponden a los nombres de las secuencias que se compararon, la tercera sera las diferencias entre ambas muestras y la cuarta mostrara el rango de lectura analizado. 
+```bash
+python -m streamlit run app.py
+```
+
+4. En el navegador (normalmente `http://localhost:8501`), subí el archivo Excel y presioná "Ejecutar comparación". Podrás descargar los resultados en Excel.
+
+### Formato del Excel esperado
+
+- Columnas requeridas: `**Sample Name**`, `**Rango de lectura**`.
+- Las mutaciones deben estar en columnas adicionales (por ejemplo `0, 1, 2, ...`) con valores tipo `A73G`, `C151S`, etc.
+- El rango de lectura debe expresarse como:
+  - D-Loop completo: `16024-576`
+  - HV1/HV2: `16024-16480/50-430` (usar `-` para inicio/fin y `/` para separar regiones)
+- La primera columna debe contener el nombre de las muestras y la segunda el rango de lectura.
+
+### Parámetro opcional: máximo de diferencias
+
+En la barra lateral podés activar un filtro para exportar y visualizar solo los pares con una cantidad máxima de diferencias (≤ N). Si no activás el filtro, se mostrarán todos los pares calculados con su número de diferencias.
+
+### Lógica del algoritmo (resumen)
+
+1. Agrupa las columnas de mutaciones en una sola lista por muestra.
+2. Calcula el rango de lectura consenso entre pares (intersección de rangos).
+3. Calcula diferencias entre haplotipos, descartando regiones homopoliméricas y mutaciones fuera del rango.
+4. Considera heteroplasmias usando nomenclatura IUPAC (`R,Y,S,W,K,M`).
+5. Reporta sólo pares con 0 o 1 diferencias.
+
+### Resultados
+
+La app genera una tabla con:
+- `INDIVIDUO 1`, `INDIVIDUO 2`: nombres de las muestras comparadas
+- `Diferencias`: conteo de diferencias (límite <= 1)
+- `Rango de lectura`: rango analizado en formato literal
+
+Podés descargar los resultados en un archivo `Resultados Comparación Masiva.xlsx`. 
 
 
 
