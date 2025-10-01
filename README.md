@@ -1,6 +1,6 @@
-# Comparacion-masiva-ADNmt
+<h1 align="center">:dna:Comparación masiva ADNmt:dna:</h1>
 
-Este proyecto permite realizar una comparación masiva de haplotipos de ADNmt a partir de un archivo .xlsx, teniendo en cuenta los rangos de lectura de las muestras, excluyendo de la comparacion regiones homopolimericas y teniendo en cuenta heteroplasmias. 
+Este proyecto permite realizar una comparación masiva de haplotipos de ADNmt a partir de un archivo .xlsx, teniendo en cuenta los rangos de lectura de las muestras, excluyendo de la comparación regiones homopoliméricas y teniendo en cuenta heteroplasmias.
 
 ## Aplicación Web (Streamlit)
 
@@ -71,7 +71,7 @@ La app genera una tabla con:
 - `Diferencias`: conteo de diferencias (límite <= 1)
 - `Rango de lectura`: rango analizado en formato literal
 
-Podés descargar los resultados en un archivo `Resultados Comparación Masiva.xlsx`. 
+Podés descargar los resultados en un archivo `Resultados Comparación Masiva.xlsx`.
 
 
 
