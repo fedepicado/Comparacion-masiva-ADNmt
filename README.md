@@ -2,7 +2,7 @@
 
 Este proyecto permite realizar una comparación masiva de haplotipos de ADNmt a partir de un archivo .xlsx, teniendo en cuenta los rangos de lectura de las muestras, excluyendo de la comparación regiones homopoliméricas y teniendo en cuenta heteroplasmias.
 
-## Aplicación Web (Streamlit)
+## Aplicación Web
 
 El repositorio incluye una aplicación en Streamlit para su uso.
 
