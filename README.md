@@ -62,7 +62,7 @@ En la barra lateral podés activar un filtro para exportar y visualizar solo los
 2. Calcula el rango de lectura consenso entre pares (intersección de rangos).
 3. Calcula diferencias entre haplotipos, descartando regiones homopoliméricas y mutaciones fuera del rango.
 4. Considera heteroplasmias usando nomenclatura IUPAC (`R,Y,S,W,K,M`).
-5. Al exportar los resultaods se puede elegir el numero maximo de diferencias.
+5. Al exportar los resultados se puede elegir el numero máximo de diferencias.
 
 ### Resultados
 
