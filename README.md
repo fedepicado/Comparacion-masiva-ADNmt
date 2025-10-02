@@ -4,7 +4,7 @@ Este proyecto permite realizar una comparación masiva de haplotipos de ADNmt a 
 
 ## Aplicación Web (Streamlit)
 
-El repositorio incluye una aplicación en Streamlit que realiza exactamente la misma comparación a partir de un Excel de entrada.
+El repositorio incluye una aplicación en Streamlit para su uso.
 
 ### Prerrequisitos
 - Python 3.9 o superior
@@ -69,7 +69,7 @@ En la barra lateral podés activar un filtro para exportar y visualizar solo los
 La app genera una tabla con:
 - `INDIVIDUO 1`, `INDIVIDUO 2`: nombres de las muestras comparadas
 - `Diferencias`: conteo de diferencias (límite <= 1)
-- `Rango de lectura`: rango analizado en formato literal
+- `Rango de lectura`: rango que se tuvo en cuenta para hacer la comparacion.
 
 Podés descargar los resultados en un archivo `Resultados Comparación Masiva.xlsx`.
 
