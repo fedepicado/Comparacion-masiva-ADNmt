@@ -62,13 +62,13 @@ En la barra lateral podés activar un filtro para exportar y visualizar solo los
 2. Calcula el rango de lectura consenso entre pares (intersección de rangos).
 3. Calcula diferencias entre haplotipos, descartando regiones homopoliméricas y mutaciones fuera del rango.
 4. Considera heteroplasmias usando nomenclatura IUPAC (`R,Y,S,W,K,M`).
-5. Reporta sólo pares con 0 o 1 diferencias.
+5. Al exportar los resultaods se puede elegir el numero maximo de diferencias.
 
 ### Resultados
 
 La app genera una tabla con:
-- `INDIVIDUO 1`, `INDIVIDUO 2`: nombres de las muestras comparadas
-- `Diferencias`: conteo de diferencias (límite <= 1)
+- `INDIVIDUO 1`, `INDIVIDUO 2`: nombres de las muestras comparadas.
+- `Diferencias`: conteo de diferencias 
 - `Rango de lectura`: rango que se tuvo en cuenta para hacer la comparacion.
 
 Podés descargar los resultados en un archivo `Resultados Comparación Masiva.xlsx`.
